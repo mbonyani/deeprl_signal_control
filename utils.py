@@ -6,7 +6,8 @@ import time
 import os
 import pandas as pd
 import subprocess
-
+from core import Agent
+from core import Processor
 
 def check_dir(cur_dir):
     if not os.path.exists(cur_dir):
@@ -108,7 +109,7 @@ class Counter:
 
 
 class Trainer():
-    def __init__(self, env, model, global_counter, summary_writer, run_test, output_path=None):
+    def __init__(self, env, model, global_counter, summary_writer, run_test,processor, output_path=None):
         self.cur_step = 0
         self.global_counter = global_counter
         self.env = env
@@ -125,6 +126,7 @@ class Trainer():
             self.test_num = self.env.test_num
             logging.info('Testing: total test num: %d' % self.test_num)
         self._init_summary()
+        self.processor = processor
 
     def _init_summary(self):
         self.train_reward = tf.placeholder(tf.float32, [])

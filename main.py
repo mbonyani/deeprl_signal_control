@@ -17,6 +17,7 @@ from utils import (Counter, Trainer, Tester, Evaluator,
                    check_dir, copy_file, find_file,
                    init_dir, init_log, init_test_flag,
                    plot_evaluation, plot_train)
+from noise_estimator import *
 
 def parse_args():
     default_base_dir = '/Users/tchu/Documents/rl_test/signal_control_results/eval_sep2019/large_grid'
@@ -123,7 +124,8 @@ def train(args):
     # disable multi-threading for safe SUMO implementation
     # threads = []
     summary_writer = tf.summary.FileWriter(dirs['log'])
-    trainer = Trainer(env, model, global_counter, summary_writer, in_test, output_path=dirs['data'])
+    processor_noisy = CartpoleProcessor(e_=0, e=0.2, surrogate=False)
+    trainer = Trainer(env, model, global_counter, summary_writer, in_test,processor_noisy, output_path=dirs['data'])
     trainer.run()
     # if in_test or post_test:
     #     # assign a different port for test env
