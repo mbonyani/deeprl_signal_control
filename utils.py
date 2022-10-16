@@ -153,12 +153,15 @@ class Trainer():
                     self.env.update_fingerprint(policy)
                 if self.agent == 'a2c':
                     action = np.random.choice(np.arange(len(policy)), p=policy)
+                    action = self.processor.process_action(action)
                 else:
                     action = []
                     for pi in policy:
                         action.append(np.random.choice(np.arange(len(pi)), p=pi))
+                    action = self.processor.process_action(action)
             else:
                 action, policy = self.model.forward(ob, mode='explore')
+                action = self.processor.process_action(action)
             next_ob, reward, done, global_reward = self.env.step(action)
             rewards.append(global_reward)
             global_step = self.global_counter.next()
